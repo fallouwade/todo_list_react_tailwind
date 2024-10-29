@@ -5,21 +5,14 @@ class Button_ajouter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      Modal: false,
-      
       input: {
         firstName: '',
         lastName: '',
       },
+      isEditing: false, // Nouveau: détermine si le formulaire est en mode édition
+      editIndex: null,  // Nouveau: l'index de l'élément en cours de modification
     };
   }
-
-  buttonModal = () => {
-    this.setState((prevState) => ({
-      Modal: !prevState.Modal,
-    }));
-  };
-  
 
   handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -31,73 +24,86 @@ class Button_ajouter extends React.Component {
     }));
   };
 
+  // Nouveau: Fonction pour activer le mode modification
+  enableEditMode = (item, index) => {
+    this.setState({
+      input: { ...item },  // Remplit les champs avec les données de l'élément
+      isEditing: true,
+      editIndex: index,
+    });
+    this.props.toggleModal(); // Affiche la modal
+  };
+
   buttonValider = (event) => {
     event.preventDefault();
-    console.log("Valeurs soumises :", this.state);
-    this.props.Partagedonne(this.state.input)
+    if (this.state.isEditing) {
+      // En mode édition, on met à jour l'élément
+      this.props.updateData(this.state.input, this.state.editIndex);
+    } else {
+      // En mode ajout, on ajoute un nouvel élément
+      this.props.Partagedonne(this.state.input);
+    }
+    
+    // Réinitialisation du formulaire après l'ajout ou la modification
+    this.props.toggleModal();
+    this.setState({
+      input: {
+        firstName: '',
+        lastName: '',
+      },
+      isEditing: false,
+      editIndex: null,
+    });
   };
 
   render() {
-   
     return (
       <div>
-        <div>
-          <button className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md" onClick={this.buttonModal}>
-            Ajouter
-          </button>
-        </div>
-        {this.state.Modal && (
+        <button className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md" onClick={this.props.toggleModal}>
+          {this.state.isEditing ? "Modifier" : "Ajouter"}
+        </button>
+
+        {this.props.Modal && (
           <div className="fixed inset-0 top-0 w-full flex justify-center bg-black bg-opacity-50">
-            <div className="bg-white sm:w-2/5 w-5/6 h-3/4 rounded-lg p-2 mt-5 mx-auto">
+            <div className="bg-white sm:w-3/12 w-5/6 h-3/4 rounded-lg mt-5 mx-auto">
               <div className="text-end">
-                <button onClick={this.buttonModal} className="py-2 px-4 bg-slate-200 rounded-lg hover:bg-slate-400">
+                <button onClick={this.props.toggleModal} className="py-2 px-4 bg-slate-200 rounded-lg hover:bg-slate-400">
                   <IoMdClose />
                 </button>
               </div>
-              <h2 className="text-lg text-[#093545] font-bold bg-sky-300 rounded p-2 mt-3 shadow">Formulaire</h2>
-              <div>
-                <form className="mt-10" onSubmit={this.buttonValider}>
-                  <label className="block mb-5">
-                    <span className="block text-sm font-medium text-slate-700">First Name</span>
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={this.state.input.firstName}
-                      onChange={this.handleInputChange}
-                      className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-                        focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-                        disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
-                        invalid:border-pink-300 invalid:text-pink-600
-                        focus:invalid:border-pink-300 focus:invalid:ring-pink-300"
-                    />
-                  </label>
+              <h2 className="text-lg text-[#093545] font-bold bg-sky-300 rounded p-2 mt-3 shadow">
+                {this.state.isEditing ? "Modifier l'élément" : "Ajouter un nouvel élément"}
+              </h2>
+              <form className="mt-10" onSubmit={this.buttonValider}>
+                <label className="block mb-5 mx-auto w-72">
+                  <span className="block text-sm font-medium text-slate-700">First Name</span>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={this.state.input.firstName}
+                    onChange={this.handleInputChange}
+                    className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+                      focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+                  />
+                </label>
 
-                  <label className="block">
-                    <span className="block text-sm font-medium text-slate-700">Last Name</span>
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={this.state.input.lastName}
-                      onChange={this.handleInputChange}
-                      className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-                        focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-                        disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
-                        invalid:border-pink-300 invalid:text-pink-600
-                        focus:invalid:border-pink-300 focus:invalid:ring-pink-300"
-                    />
-                  </label>
-                  <div className="flex justify-end mt-5 mx-5">
-                    <button type="submit" className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md">
-                      Envoyer
-                    </button>
-                    <button  
-                       onClick={this.buttonModal1}
-                    className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md">
-                      Envoyer1
-                    </button>
-                  </div>
-                </form>
-              </div>
+                <label className="block mx-auto w-72">
+                  <span className="block text-sm font-medium text-slate-700">Last Name</span>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={this.state.input.lastName}
+                    onChange={this.handleInputChange}
+                    className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+                      focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+                  />
+                </label>
+                <div className="flex justify-end mt-5 mx-5">
+                  <button type="submit" className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md">
+                    {this.state.isEditing ? "Mettre à jour" : "Envoyer"}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}
