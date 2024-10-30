@@ -38,6 +38,8 @@ class App extends React.Component{
     this.setState((prevState) => {
       const newData = [...prevState.data];
       newData[index] = updatedItem;
+
+
       return { data: newData };
     });
   };
@@ -46,7 +48,7 @@ class App extends React.Component{
   delete = (item, index) => {
     console.log(item, index);
     this.setState((prevState) => ({
-      data: prevState.data.filter((items) => items.firstName !== item.firstName)
+      data: prevState.data.filter((items,i) => i !== index)
     }));
   };
 

@@ -10,10 +10,14 @@ import Button_ajouter from './button_ajouter.jsx'
 class Table extends React.Component {
   constructor(props) {
     super(props);
+     this.inputRef = React.createRef();
+      this.pagiRef = React.createRef();
+
     this.state = {
       Modal: false,
       cle: null,
       searchTerm: '',
+       page1: 1 
       
     }
   }
@@ -32,40 +36,37 @@ class Table extends React.Component {
     this.setState({ searchTerm: e.target.value })
   }
    enableEditMode = (item, index) => {
-    this.refs.buttonAjouter.enableEditMode(item, index);
+    // this.refs.buttonAjouter.enableEditMode(item, index);
+     this.inputRef.current.enableEditMode(item, index)
   }
-  page= (iteration, page)=>{
-      page = iteration
+  page= (i)=>{
+    this.setState({ page1: i });
+     
   }
 
 
   render() {
 
     let table = this.props.Recuperedonne;
-    let currentPage = 1;
+    let currentPage = this.state.page1;
     let itemsPerPage = 3;
-    let indice;
     
-
-
-  
-
 
     const filteredTable = table
       .filter(item => item.firstName.trim() !== '' && item.lastName.trim() !== '')
       .filter(item => item.firstName.toLowerCase().includes(this.state.searchTerm.toLowerCase()));
 
-      const start = (currentPage - 1) * itemsPerPage;
+    const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     const paginatedItems = filteredTable.slice(start, end);
 
     const totalPages = Math.ceil(paginatedItems.length / itemsPerPage);
 
-    for (let i = 1; i <= totalPages; i++) {
-        if (paginatedItems.length >=3) {
-        indice=i
-    }
-  }
+    //   for (let i = 1; i <= totalPages; i++) {
+    //     if (paginatedItems.length >=3) {
+    //    this.pagiRef.current.innerHTML = `< button className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md"  onClick={() => this.page(i)} >{i}</button>`};
+    // }
+   
 
 
     const currentEntry = paginatedItems[this.state.cle];
@@ -75,7 +76,8 @@ class Table extends React.Component {
         <div className="flex justify-between sm:mx-24 mx-5 mt-5">
           <Input_recherche Recuperedonne={this.props.Recuperedonne} onChange={this.handlechange} />
           <Button_ajouter 
-             ref="buttonAjouter" 
+             // ref="buttonAjouter" 
+          ref={this.inputRef}
           Partagedonne={this.props.Partagedonne} 
           toggleModal={this.props.toggleModal}
           Modal={this.props.Modal} 
@@ -155,10 +157,26 @@ class Table extends React.Component {
           </table>
           
         </div>
-          <div>
-            <button className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md" onClick={() => this.page(indice, currentPage)}>
-                  {indice}
-            </button>
+          <div className="flex gap-3 justify-center mt-12" >
+
+           <button
+          className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md"
+          onClick={() => this.page(this.state.page1 - 1)}
+          disabled={this.state.page1 === 1}
+          style={{ display: paginatedItems.length >= 3 ? 'block' : 'none' }}
+        >
+         Next
+        </button>
+        <button
+          className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md"
+          onClick={() => this.page(this.state.page1 + 1)}
+          style={{ display: paginatedItems.length >= 3 ? 'block' : 'none' }}
+
+
+        >
+         Suivant
+        </button>
+
           </div>
 
       </div>
