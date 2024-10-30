@@ -49,7 +49,7 @@ class Table extends React.Component {
 
     let table = this.props.Recuperedonne;
     let currentPage = this.state.page1;
-    let itemsPerPage = 3;
+    let itemsPerPage = 6;
     
 
     const filteredTable = table
@@ -163,14 +163,14 @@ class Table extends React.Component {
           className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md"
           onClick={() => this.page(this.state.page1 - 1)}
           disabled={this.state.page1 === 1}
-          style={{ display: filteredTable.length >= 4 ? 'block' : 'none' }}
+          style={{ display: filteredTable.length >= 6 ? 'block' : 'none' }}
         >
          Next
         </button>
         <button
           className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md"
           onClick={() => this.page(this.state.page1 + 1)}
-          style={{ display: filteredTable.length >= 4 ? 'block' : 'none' }}
+          style={{ display: filteredTable.length >= 6 ? 'block' : 'none' }}
 
 
         >
