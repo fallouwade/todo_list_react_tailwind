@@ -83,7 +83,7 @@ class Table extends React.Component {
          
           />
         </div>
-        <div className="flex justify-center w-full">
+        <div className="flex justify-center w-full mt-10">
           <table className="border-collapse border border-slate sm:w-4/5 w-full">
             <thead>
               <tr>
@@ -155,11 +155,11 @@ class Table extends React.Component {
           </table>
           
         </div>
-          <div>
+         {/* <div>
             <button className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md" onClick={() => this.page(indice, currentPage)}>
                   {indice}
             </button>
-          </div>
+          </div>*/}
 
       </div>
     )
