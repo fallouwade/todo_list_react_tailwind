@@ -16,7 +16,7 @@ class Button_ajouter extends React.Component {
 
   handleInputChange = (event) => {
     const { name, value } =  event.target;
-     if(value.trim() !== ''){
+     
     this.setState((prevState) => ({
       input: {
         ...prevState.input,
@@ -24,7 +24,7 @@ class Button_ajouter extends React.Component {
       },
 
     }));
-  }
+  
   };
 
   // Nouveau: Fonction pour activer le mode modification
