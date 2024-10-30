@@ -15,13 +15,16 @@ class Button_ajouter extends React.Component {
   }
 
   handleInputChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value } =  event.target;
+     if(value.trim() !== ''){
     this.setState((prevState) => ({
       input: {
         ...prevState.input,
         [name]: value,
       },
+
     }));
+  }
   };
 
   // Nouveau: Fonction pour activer le mode modification
@@ -40,8 +43,12 @@ class Button_ajouter extends React.Component {
       // En mode édition, on met à jour l'élément
       this.props.updateData(this.state.input, this.state.editIndex);
     } else {
+        const etat= this.state.input
       // En mode ajout, on ajoute un nouvel élément
+        if(etat.firstName !== ''){
       this.props.Partagedonne(this.state.input);
+    }
+
     }
     
     // Réinitialisation du formulaire après l'ajout ou la modification
