@@ -11,15 +11,15 @@ class App extends React.Component{
 			 Modal: false,
 			 index1: "	",
 			data:[],
-			data1:{}
+			
 		}
 	}
 
 
-  buttonModal = (index2) => {
+  buttonModal = () => {
     this.setState((prevState) => ({
       Modal: !prevState.Modal,
-      index1: index2,
+     
     }));
 
    
@@ -32,7 +32,6 @@ class App extends React.Component{
       ...prevState.data,
       	newdata
     ],
-    data1:{newdata}
   }));
 }
   updateData = (updatedItem, index) => {
@@ -42,11 +41,20 @@ class App extends React.Component{
       return { data: newData };
     });
   };
+  
+
+  delete = (item, index) => {
+    console.log(item, index);
+    this.setState((prevState) => ({
+      data: prevState.data.filter((items) => items.firstName !== item.firstName)
+    }));
+  };
+
 
 		
 		render(){
 
-			console.log(this.state.index1)
+			console.log(this.state.data)
 			return (
 				<section className="w-screen mt-5 ">
 					<h1 className="text-3xl font-semibold text-center pt-2">Todolist </h1>
@@ -55,7 +63,7 @@ class App extends React.Component{
 						<Button_ajouter Partagedonne={this.update}  toggleModal={this.buttonModal}  Modal={this.state.Modal} index={this.state.index1} />*/}
 					</div>
 					<div className="mt-10 ">
-						<Table Recuperedonne={this.state.data}  updateData={this.updateData} Partagedonne={this.update}  toggleModal={this.buttonModal}  Modal={this.state.Modal} index={this.state.index1} />
+						<Table Recuperedonne={this.state.data} deleter={this.delete} updateData={this.updateData} Partagedonne={this.update}  toggleModal={this.buttonModal}  Modal={this.state.Modal} />
 					</div>
 				</section>
 				)

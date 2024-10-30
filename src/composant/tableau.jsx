@@ -14,6 +14,7 @@ class Table extends React.Component {
       Modal: false,
       cle: null,
       searchTerm: '',
+      
     }
   }
 
@@ -23,10 +24,9 @@ class Table extends React.Component {
       cle: index
     }));
   }
-
-  modifier = (index) => {
-    this.props.toggleModal(index); // Appel de la modal dans le composant parent pour la modification
-  }
+    delete= (item,index)=>{
+       this.props.deleter(item,index)
+    }
 
   handlechange = (e) => {
     this.setState({ searchTerm: e.target.value })
@@ -35,12 +35,17 @@ class Table extends React.Component {
     this.refs.buttonAjouter.enableEditMode(item, index);
   }
 
+
   render() {
+
     let table = this.props.Recuperedonne;
     
+
+
     const filteredTable = table
       .filter(item => item.firstName.trim() !== '' && item.lastName.trim() !== '')
       .filter(item => item.firstName.toLowerCase().includes(this.state.searchTerm.toLowerCase()));
+
 
     const currentEntry = filteredTable[this.state.cle];
 
@@ -54,6 +59,7 @@ class Table extends React.Component {
           toggleModal={this.props.toggleModal}
           Modal={this.props.Modal} 
           updateData={this.props.updateData} 
+         
           />
         </div>
         <div className="flex justify-center w-full">
@@ -116,7 +122,7 @@ class Table extends React.Component {
                         </button>
                       </div>
                       <div>
-                        <button>
+                        <button onClick={() => this.delete(item, index)}>
                           <RiDeleteBin5Line />
                         </button>
                       </div>
