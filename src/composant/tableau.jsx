@@ -34,20 +34,41 @@ class Table extends React.Component {
    enableEditMode = (item, index) => {
     this.refs.buttonAjouter.enableEditMode(item, index);
   }
+  page= (iteration, page)=>{
+      page = iteration
+  }
 
 
   render() {
 
     let table = this.props.Recuperedonne;
+    let currentPage = 1;
+    let itemsPerPage = 3;
+    let indice;
     
+
+
+  
 
 
     const filteredTable = table
       .filter(item => item.firstName.trim() !== '' && item.lastName.trim() !== '')
       .filter(item => item.firstName.toLowerCase().includes(this.state.searchTerm.toLowerCase()));
 
+      const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const paginatedItems = filteredTable.slice(start, end);
 
-    const currentEntry = filteredTable[this.state.cle];
+    const totalPages = Math.ceil(paginatedItems.length / itemsPerPage);
+
+    for (let i = 1; i <= totalPages; i++) {
+        if (paginatedItems.length >=3) {
+        indice=i
+    }
+  }
+
+
+    const currentEntry = paginatedItems[this.state.cle];
 
     return (
       <div>
@@ -66,13 +87,13 @@ class Table extends React.Component {
           <table className="border-collapse border border-slate sm:w-4/5 w-full">
             <thead>
               <tr>
-                <th className="border border-slate text-center">Nom</th>
-                <th className="border border-slate text-center">Prénom</th>
+                <th className="border border-slate text-center">Tache</th>
+                <th className="border border-slate text-center">Description</th>
                 <th className="border border-slate text-center">Action</th>
               </tr>
             </thead>
             <tbody>
-              {filteredTable.map((item, index) => (
+              {paginatedItems.map((item, index) => (
                 <tr className="hover:bg-gray-100" key={index}>
                   <td className="border border-slate text-center ">{item.firstName}</td>
                   <td className="border border-slate text-center">{item.lastName}</td>
@@ -132,7 +153,14 @@ class Table extends React.Component {
               ))}
             </tbody>
           </table>
+          
         </div>
+          <div>
+            <button className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md" onClick={() => this.page(indice, currentPage)}>
+                  {indice}
+            </button>
+          </div>
+
       </div>
     )
   }
