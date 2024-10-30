@@ -163,14 +163,14 @@ class Table extends React.Component {
           className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md"
           onClick={() => this.page(this.state.page1 - 1)}
           disabled={this.state.page1 === 1}
-          style={{ display: paginatedItems.length >= 3 ? 'block' : 'none' }}
+          style={{ display: filteredTable.length >= 4 ? 'block' : 'none' }}
         >
          Next
         </button>
         <button
           className="py-2 px-5 bg-sky-500 text-white font-semibold rounded shadow-md"
           onClick={() => this.page(this.state.page1 + 1)}
-          style={{ display: paginatedItems.length >= 3 ? 'block' : 'none' }}
+          style={{ display: filteredTable.length >= 4 ? 'block' : 'none' }}
 
 
         >
